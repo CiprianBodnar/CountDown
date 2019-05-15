@@ -6,22 +6,19 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.Timer;
-
 public class Game extends AppCompatActivity implements View.OnClickListener {
-    public int counter=0;
+
     private Button button;
-    long actualSec;
-    private TextView textView, scoreUpdateView;
-    private ImageView paused;
-    private final long startTime = 6 * 1000;
-    private final long intervale = 1 * 1000;
-    private boolean timerHasStarted = false, pauseFlag = false;
-    private CountDownTimer countDownTimer, save;
-    private Timer timer = new Timer();
+    private ProgressBar progressBar;
+    private TextView textView;
+    private long startTime = 5 * 1000;
+    private final long intervale = 1;
+    private boolean timerHasStarted = false;
+    private CountDownTimer countDownTimer;
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,20 +27,17 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
         button = findViewById(R.id.button);
         textView = findViewById(R.id.seconds);
-        scoreUpdateView = findViewById(R.id.ScoreUpdateView);
         button.setOnClickListener(this);
-        paused = findViewById(R.id.pauseButton);
-        paused.setOnClickListener(this);
-
-        String result = textView.getText() + String.valueOf(startTime/1000);
-        textView.setText(result);
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
         countDownTimer = new MyCountDownTimer(startTime,intervale);
 
+        ((MyCountDownTimer) countDownTimer).update();
     }
 
-    void gameOver(int score){
+    void gameOver(String time){
         Intent intent = new Intent(getApplicationContext(), Result.class);
-        intent.putExtra("SCORE",score);
+        intent.putExtra("SCORE",time);
         startActivity(intent);
     }
 
@@ -54,8 +48,6 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
             case R.id.button:
                countDownStarter();
-            case R.id.pauseButton:
-                pauseGame(paused);
 
             default:
                 break;
@@ -65,43 +57,18 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
     private void countDownStarter(){
         if(!timerHasStarted){
+            progressBar.setVisibility(View.VISIBLE);
             countDownTimer.start();
             timerHasStarted = true;
             button.setText("Stop");
         }
         else{
-
-            //int sec = Integer.parseInt (textView.getText().toString());
-            if(actualSec == 0){
-
-                counter ++;
-                scoreUpdateView.setText("Score: " + String.valueOf(counter));
-                countDownTimer.cancel();
-                countDownTimer.start();
-                timerHasStarted = true;
-            }
-            else{
-                countDownTimer  .cancel();
-                gameOver(counter);
-            }
+            timerHasStarted = false;
+            countDownTimer  .cancel();
+            gameOver(String.valueOf(textView.getText()));
         }
     }
 
-    public void pauseGame(View v){
-
-
-        if(pauseFlag == false){
-            pauseFlag = true;
-           // countDownTimer = save;
-
-        }
-        else{
-            pauseFlag = false;
-           // save = countDownTimer;
-            countDownTimer.cancel();
-
-        }
-    }
 
 
     public class MyCountDownTimer extends CountDownTimer {
@@ -112,22 +79,35 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         @Override
         public void onFinish() {
             textView.setText("Time's up!");
-            gameOver(counter);
+            gameOver(String.valueOf(textView.getText()));
         }
 
         @Override
         public void onTick(long millisUntilFinished) {
 
+            startTime = millisUntilFinished;
+            update();
 
-            if(millisUntilFinished/1000 >=2 && millisUntilFinished/1000<=6) {
-                textView.setText("" + millisUntilFinished / 1000);
-                actualSec = millisUntilFinished/1000;
-            }
-            else {
-                textView.setText("");
-                actualSec = millisUntilFinished/1000;
-            }
+        }
 
+        private void update() {
+            int minutes = (int) startTime / 60000;
+            int seconds = (int) startTime % 60000 / 1000;
+
+            String timeLeftText;
+
+            timeLeftText = "" + minutes;
+            timeLeftText += ":";
+
+
+            timeLeftText += "0" + seconds;
+            timeLeftText += ".";
+
+            timeLeftText += startTime % 1000;
+
+            if (seconds < 2) textView.setVisibility(View.GONE);
+
+            textView.setText(timeLeftText);
         }
     }
 }
