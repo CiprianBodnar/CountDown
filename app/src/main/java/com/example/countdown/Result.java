@@ -12,7 +12,7 @@ import android.widget.TextView;
 public class Result extends AppCompatActivity implements View.OnClickListener {
 
     private TextView highScoreView, scoreView;
-    private Button tryAgain;
+    private Button tryAgain, menuButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +23,8 @@ public class Result extends AppCompatActivity implements View.OnClickListener {
         scoreView = findViewById(R.id.scoreText);
         tryAgain = findViewById(R.id.tryAgain);
         tryAgain.setOnClickListener(this);
+        menuButton = findViewById(R.id.toMenu);
+        menuButton.setOnClickListener(this);
 
         int score=0, highScore=0;
 
@@ -49,7 +51,22 @@ public class Result extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        Intent intent = new Intent(getApplicationContext(), Game.class);
-        startActivity(intent);
+        switch (v.getId()){
+
+            case R.id.tryAgain:
+                Intent intent = new Intent(getApplicationContext(), Game.class);
+                startActivity(intent);
+                break;
+
+
+            case R.id.toMenu:
+                intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+
+
     }
 }
