@@ -18,7 +18,6 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private final long intervale = 1;
     private boolean timerHasStarted = false;
     private CountDownTimer countDownTimer;
-
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +30,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         countDownTimer = new MyCountDownTimer(startTime,intervale);
+
+        Intent i = getIntent();
 
         ((MyCountDownTimer) countDownTimer).update();
     }

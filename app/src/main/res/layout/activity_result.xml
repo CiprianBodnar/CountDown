@@ -24,7 +24,7 @@
 
     <TextView
         android:id="@+id/scoreText"
-        android:layout_width="151dp"
+        android:layout_width="249dp"
         android:layout_height="58dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
