@@ -1,6 +1,7 @@
 package com.example.countdown;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private final long intervale = 1;
     private boolean timerHasStarted = false;
     private CountDownTimer countDownTimer;
+    private MediaPlayer mediaPlayer;
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +32,15 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         countDownTimer = new MyCountDownTimer(startTime,intervale);
+        mediaPlayer = MediaPlayer.create(Game.this,R.raw.tick);
 
-        Intent i = getIntent();
 
         ((MyCountDownTimer) countDownTimer).update();
     }
 
     void gameOver(String time){
+
+        mediaPlayer.release();
         Intent intent = new Intent(getApplicationContext(), Result.class);
         intent.putExtra("SCORE",time);
         startActivity(intent);
@@ -60,12 +64,14 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         if(!timerHasStarted){
             progressBar.setVisibility(View.VISIBLE);
             countDownTimer.start();
+            mediaPlayer.start();
             timerHasStarted = true;
             button.setText("Stop");
         }
         else{
             timerHasStarted = false;
             countDownTimer  .cancel();
+            mediaPlayer.release();
             gameOver(String.valueOf(textView.getText()));
         }
     }

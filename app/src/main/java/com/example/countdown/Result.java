@@ -114,12 +114,12 @@ public class Result extends AppCompatActivity implements View.OnClickListener {
 
 
     private void Save(String userName, String userScore){
-        SQLiteDatabase db = new myDBAdapter(this).getWritableDatabase();
+        SQLiteDatabase db = new SQLConector(this).getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(myDBContract.Score.COLUMN_NAME, userName);
-        values.put(myDBContract.Score.COLUMN_SCORE, userScore);
-        long rowId = db.insert(myDBContract.Score.TABLE_NAME, null, values);
+        values.put(Create.NAME, userName);
+        values.put(Create.SCORE, userScore);
+        db.insert(Create.TABLE_NAME, null, values);
     }
 
 

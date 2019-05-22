@@ -2,8 +2,6 @@ package com.example.countdown;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -38,23 +36,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),HighScore.class);
-                SQLiteDatabase db = new myDBAdapter(v.getContext()).getReadableDatabase();
-
-                String[] projection = {
-                        myDBContract.Score._ID,
-                        myDBContract.Score.COLUMN_SCORE
-                };
-
-                Cursor cursor = db.query(
-                        myDBContract.Score.TABLE_NAME,
-                        projection,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                );
-
                 startActivity(intent);
 
             }

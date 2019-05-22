@@ -15,20 +15,20 @@ public class HighScore extends AppCompatActivity {
         setContentView(R.layout.activity_high_score);
         scores = findViewById(R.id.scores);
 
-        SQLiteDatabase db = new myDBAdapter(this).getReadableDatabase();
+        SQLiteDatabase db = new SQLConector(this).getReadableDatabase();
 
         String[] projection = {
-                myDBContract.Score._ID,
-                myDBContract.Score.COLUMN_NAME,
-                myDBContract.Score.COLUMN_SCORE
+                Create._ID,
+                Create.NAME,
+                Create.SCORE
         };
 
         Cursor cursor = db.query(
-                myDBContract.Score.TABLE_NAME,
+                Create.TABLE_NAME,
                 projection,
                 null,
                 null,
-                myDBContract.Score.COLUMN_SCORE,
+                Create.SCORE,
                 null,
                 null
         );
@@ -36,8 +36,8 @@ public class HighScore extends AppCompatActivity {
         StringBuffer buffer = new StringBuffer();
         int i = 1;
         while (cursor.moveToNext()){
-            String name = cursor.getString(cursor.getColumnIndex(myDBContract.Score.COLUMN_NAME));
-            String score = cursor.getString(cursor.getColumnIndex(myDBContract.Score.COLUMN_SCORE));
+            String name = cursor.getString(cursor.getColumnIndex(Create.NAME));
+            String score = cursor.getString(cursor.getColumnIndex(Create.SCORE));
             buffer.append(i + ". " + name + " " + score + "s \n");
             i ++;
 
